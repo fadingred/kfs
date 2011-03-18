@@ -1,0 +1,14 @@
+The Kernelless Filesystem (KFS) is a small library that allows you to create filesystems in user space. KFS differs
+from libraries that provide similar functionality in that it does not require any kernel extensions to be
+installed in order to operate.
+
+The library runs in userspace and allows applications to create new types of filesystems and mount them directly in
+userspace. It uses existing functionality that ships with the OS kernel in order to do this.
+
+Currently, KFS runs on Mac OS X 10.5+. It is backed by kernel support for NFS. It runs an NFS3 server in order to
+create filesystems. The KFS library does not create any new processes. It runs entirely within the host process, and
+creates a new thread in order to handle filesystem requests. It only spawns one thread to handle filesystem requests,
+so it does not support asynchronous filesystem designs. That is, if you have two read requests they will be queued and
+the second will not begin until the first completes.
+
+KFS uses CoreFoundation lightly, but otherwise could easily be ported to other platforms.

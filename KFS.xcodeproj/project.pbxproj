@@ -1,0 +1,444 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8B1DA2F212FB4B4C00AD3459 /* KFS.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B1DA2F012FB4B4C00AD3459 /* KFS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8B5D063A131160C8000756AE /* KFS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B1DA2A812FB4A7400AD3459 /* KFS.framework */; };
+		8B5D0644131160EE000756AE /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B5D0643131160EE000756AE /* test.c */; };
+		8B8F8B721304518600E75E6A /* fileid.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B8F8B701304518600E75E6A /* fileid.h */; };
+		8B8F8B731304518600E75E6A /* fileid.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B8F8B711304518600E75E6A /* fileid.c */; };
+		8BDF426112FB4DD3007F10AB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BDF426012FB4DD3007F10AB /* Foundation.framework */; };
+		8BDF430612FB5083007F10AB /* nfs3.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BDF42FE12FB5083007F10AB /* nfs3.h */; };
+		8BDF430712FB5083007F10AB /* nfs3programs.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BDF42FF12FB5083007F10AB /* nfs3programs.h */; };
+		8BDF430812FB5083007F10AB /* kfslib.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BDF430012FB5083007F10AB /* kfslib.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8BDF430912FB5083007F10AB /* nfs3.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BDF430112FB5083007F10AB /* nfs3.c */; };
+		8BDF430A12FB5083007F10AB /* nfs3programs.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BDF430212FB5083007F10AB /* nfs3programs.c */; };
+		8BDF430B12FB5083007F10AB /* kfslib.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BDF430312FB5083007F10AB /* kfslib.c */; };
+		8BDF430C12FB5083007F10AB /* nfs3xdr.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BDF430412FB5083007F10AB /* nfs3xdr.c */; };
+		8BDF45AB12FB6DC7007F10AB /* internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BDF45A912FB6DC7007F10AB /* internal.h */; };
+		8BDF45AC12FB6DC7007F10AB /* internal.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BDF45AA12FB6DC7007F10AB /* internal.c */; };
+		8BDF4B1F12FCC729007F10AB /* mountargs.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BDF4B1D12FCC729007F10AB /* mountargs.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8B5D0636131160B2000756AE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8B1DA28A12FB4A1A00AD3459 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8B1DA2A712FB4A7400AD3459;
+			remoteInfo = KFS;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		8B1DA2A812FB4A7400AD3459 /* KFS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KFS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B1DA2AA12FB4A7400AD3459 /* KFS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = KFS.plist; path = Info/KFS.plist; sourceTree = "<group>"; };
+		8B1DA2F012FB4B4C00AD3459 /* KFS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KFS.h; path = Source/KFS.h; sourceTree = "<group>"; };
+		8B1DA2FB12FB4B7E00AD3459 /* KFS.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KFS.pch; path = Source/KFS.pch; sourceTree = "<group>"; };
+		8B5D063013116090000756AE /* Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Test; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B5D0643131160EE000756AE /* test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = test.c; path = Source/Test/test.c; sourceTree = "<group>"; };
+		8B8F8B701304518600E75E6A /* fileid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fileid.h; path = Source/kfslib/fileid.h; sourceTree = "<group>"; };
+		8B8F8B711304518600E75E6A /* fileid.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = fileid.c; path = Source/kfslib/fileid.c; sourceTree = "<group>"; };
+		8BDF426012FB4DD3007F10AB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		8BDF42FE12FB5083007F10AB /* nfs3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = nfs3.h; path = Source/kfslib/backends/nfs/nfs3.h; sourceTree = "<group>"; };
+		8BDF42FF12FB5083007F10AB /* nfs3programs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = nfs3programs.h; path = Source/kfslib/backends/nfs/nfs3programs.h; sourceTree = "<group>"; };
+		8BDF430012FB5083007F10AB /* kfslib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = kfslib.h; path = Source/kfslib/kfslib.h; sourceTree = "<group>"; };
+		8BDF430112FB5083007F10AB /* nfs3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nfs3.c; path = Source/kfslib/backends/nfs/nfs3.c; sourceTree = "<group>"; };
+		8BDF430212FB5083007F10AB /* nfs3programs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nfs3programs.c; path = Source/kfslib/backends/nfs/nfs3programs.c; sourceTree = "<group>"; };
+		8BDF430312FB5083007F10AB /* kfslib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = kfslib.c; path = Source/kfslib/kfslib.c; sourceTree = "<group>"; };
+		8BDF430412FB5083007F10AB /* nfs3xdr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nfs3xdr.c; path = Source/kfslib/backends/nfs/nfs3xdr.c; sourceTree = "<group>"; };
+		8BDF430512FB5083007F10AB /* nfs3.x */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = nfs3.x; path = Source/kfslib/backends/nfs/nfs3.x; sourceTree = "<group>"; };
+		8BDF45A912FB6DC7007F10AB /* internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = internal.h; path = Source/kfslib/internal.h; sourceTree = "<group>"; };
+		8BDF45AA12FB6DC7007F10AB /* internal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = internal.c; path = Source/kfslib/internal.c; sourceTree = "<group>"; };
+		8BDF4B1D12FCC729007F10AB /* mountargs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mountargs.h; path = Source/kfslib/mountargs.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8B1DA2A612FB4A7400AD3459 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8BDF426112FB4DD3007F10AB /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8B5D062E13116090000756AE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8B5D063A131160C8000756AE /* KFS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		8B1DA28812FB4A1A00AD3459 = {
+			isa = PBXGroup;
+			children = (
+				8B1DA2FB12FB4B7E00AD3459 /* KFS.pch */,
+				8B1DA2F012FB4B4C00AD3459 /* KFS.h */,
+				8BDF42E812FB4DF9007F10AB /* ObjC */,
+				8BDF42E712FB4DF5007F10AB /* Base */,
+				8B5D062C13116075000756AE /* Tests */,
+				8B1DA2B212FB4A7E00AD3459 /* Resources */,
+				8BDF42E312FB4DDA007F10AB /* Frameworks */,
+				8B1DA2A912FB4A7400AD3459 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8B1DA2A912FB4A7400AD3459 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8B1DA2A812FB4A7400AD3459 /* KFS.framework */,
+				8B5D063013116090000756AE /* Test */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8B1DA2B212FB4A7E00AD3459 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8B1DA2BE12FB4AB100AD3459 /* Info */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		8B1DA2BE12FB4AB100AD3459 /* Info */ = {
+			isa = PBXGroup;
+			children = (
+				8B1DA2AA12FB4A7400AD3459 /* KFS.plist */,
+			);
+			name = Info;
+			sourceTree = "<group>";
+		};
+		8B5D062C13116075000756AE /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				8B5D0643131160EE000756AE /* test.c */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
+		8B9F9E3813099CDB00E0E242 /* Backends */ = {
+			isa = PBXGroup;
+			children = (
+				8B9F9E3913099CE000E0E242 /* NFS3 */,
+			);
+			name = Backends;
+			sourceTree = "<group>";
+		};
+		8B9F9E3913099CE000E0E242 /* NFS3 */ = {
+			isa = PBXGroup;
+			children = (
+				8BDF430512FB5083007F10AB /* nfs3.x */,
+				8BDF430112FB5083007F10AB /* nfs3.c */,
+				8BDF430E12FB509A007F10AB /* Generated */,
+			);
+			name = NFS3;
+			sourceTree = "<group>";
+		};
+		8B9F9E3B13099D0200E0E242 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				8BDF430312FB5083007F10AB /* kfslib.c */,
+				8B8F8B701304518600E75E6A /* fileid.h */,
+				8B8F8B711304518600E75E6A /* fileid.c */,
+				8BDF45A912FB6DC7007F10AB /* internal.h */,
+				8BDF45AA12FB6DC7007F10AB /* internal.c */,
+				8BDF4B1D12FCC729007F10AB /* mountargs.h */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		8BDF42E312FB4DDA007F10AB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8BDF426012FB4DD3007F10AB /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8BDF42E712FB4DF5007F10AB /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				8BDF430012FB5083007F10AB /* kfslib.h */,
+				8B9F9E3B13099D0200E0E242 /* Core */,
+				8B9F9E3813099CDB00E0E242 /* Backends */,
+			);
+			name = Base;
+			sourceTree = "<group>";
+		};
+		8BDF42E812FB4DF9007F10AB /* ObjC */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = ObjC;
+			sourceTree = "<group>";
+		};
+		8BDF430E12FB509A007F10AB /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				8BDF42FE12FB5083007F10AB /* nfs3.h */,
+				8BDF430412FB5083007F10AB /* nfs3xdr.c */,
+				8BDF42FF12FB5083007F10AB /* nfs3programs.h */,
+				8BDF430212FB5083007F10AB /* nfs3programs.c */,
+			);
+			name = Generated;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		8B1DA2A312FB4A7400AD3459 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8B1DA2F212FB4B4C00AD3459 /* KFS.h in Headers */,
+				8BDF430612FB5083007F10AB /* nfs3.h in Headers */,
+				8BDF430712FB5083007F10AB /* nfs3programs.h in Headers */,
+				8BDF430812FB5083007F10AB /* kfslib.h in Headers */,
+				8BDF45AB12FB6DC7007F10AB /* internal.h in Headers */,
+				8BDF4B1F12FCC729007F10AB /* mountargs.h in Headers */,
+				8B8F8B721304518600E75E6A /* fileid.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8B1DA2A712FB4A7400AD3459 /* KFS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8B1DA2B012FB4A7400AD3459 /* Build configuration list for PBXNativeTarget "KFS" */;
+			buildPhases = (
+				8B1DA2A312FB4A7400AD3459 /* Headers */,
+				8B1DA2A412FB4A7400AD3459 /* Resources */,
+				8B1DA2A512FB4A7400AD3459 /* Sources */,
+				8B1DA2A612FB4A7400AD3459 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KFS;
+			productName = KFS;
+			productReference = 8B1DA2A812FB4A7400AD3459 /* KFS.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		8B5D062F13116090000756AE /* Test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8B5D0642131160E6000756AE /* Build configuration list for PBXNativeTarget "Test" */;
+			buildPhases = (
+				8B5D062D13116090000756AE /* Sources */,
+				8B5D062E13116090000756AE /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8B5D0637131160B2000756AE /* PBXTargetDependency */,
+			);
+			name = Test;
+			productName = Test;
+			productReference = 8B5D063013116090000756AE /* Test */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8B1DA28A12FB4A1A00AD3459 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = "FadingRed LLC";
+			};
+			buildConfigurationList = 8B1DA28D12FB4A1A00AD3459 /* Build configuration list for PBXProject "KFS" */;
+			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 8B1DA28812FB4A1A00AD3459;
+			productRefGroup = 8B1DA2A912FB4A7400AD3459 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8B1DA2A712FB4A7400AD3459 /* KFS */,
+				8B5D062F13116090000756AE /* Test */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8B1DA2A412FB4A7400AD3459 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8B1DA2A512FB4A7400AD3459 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8BDF430912FB5083007F10AB /* nfs3.c in Sources */,
+				8BDF430A12FB5083007F10AB /* nfs3programs.c in Sources */,
+				8BDF430B12FB5083007F10AB /* kfslib.c in Sources */,
+				8BDF430C12FB5083007F10AB /* nfs3xdr.c in Sources */,
+				8BDF45AC12FB6DC7007F10AB /* internal.c in Sources */,
+				8B8F8B731304518600E75E6A /* fileid.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8B5D062D13116090000756AE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8B5D0644131160EE000756AE /* test.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8B5D0637131160B2000756AE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8B1DA2A712FB4A7400AD3459 /* KFS */;
+			targetProxy = 8B5D0636131160B2000756AE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		8B1DA28B12FB4A1A00AD3459 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				RUN_CLANG_STATIC_ANALYZER = YES;
+			};
+			name = Debug;
+		};
+		8B1DA28C12FB4A1A00AD3459 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				RUN_CLANG_STATIC_ANALYZER = YES;
+			};
+			name = Release;
+		};
+		8B1DA2AB12FB4A7400AD3459 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_PREFIX_HEADER = Source/KFS.pch;
+				INFOPLIST_FILE = Info/KFS.plist;
+				INSTALL_PATH = "@rpath";
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				PRODUCT_NAME = KFS;
+			};
+			name = Debug;
+		};
+		8B1DA2AC12FB4A7400AD3459 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_PREFIX_HEADER = Source/KFS.pch;
+				INFOPLIST_FILE = Info/KFS.plist;
+				INSTALL_PATH = "@rpath";
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				PRODUCT_NAME = KFS;
+			};
+			name = Release;
+		};
+		8B5D063213116090000756AE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = Test;
+			};
+			name = Debug;
+		};
+		8B5D063313116090000756AE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = Test;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8B1DA28D12FB4A1A00AD3459 /* Build configuration list for PBXProject "KFS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8B1DA28B12FB4A1A00AD3459 /* Debug */,
+				8B1DA28C12FB4A1A00AD3459 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8B1DA2B012FB4A7400AD3459 /* Build configuration list for PBXNativeTarget "KFS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8B1DA2AB12FB4A7400AD3459 /* Debug */,
+				8B1DA2AC12FB4A7400AD3459 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8B5D0642131160E6000756AE /* Build configuration list for PBXNativeTarget "Test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8B5D063213116090000756AE /* Debug */,
+				8B5D063313116090000756AE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8B1DA28A12FB4A1A00AD3459 /* Project object */;
+}
