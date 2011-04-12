@@ -47,6 +47,7 @@
 #define	NFSMNT_LOCALLOCKS	0x00080000  /* do file locking locally on client */
 #define	NFSMNT_SECFLAVOR	0x01000000  /* Use security flavor */
 #define	NFSMNT_SECSYSOK		0x02000000  /* Server can support auth sys */
+#define	NFSMNT_NOQUOTA		0x08000000  /* don't support QUOTA requests */
 
 struct nfs_args3 {
 	int		version;	/* args structure version number */

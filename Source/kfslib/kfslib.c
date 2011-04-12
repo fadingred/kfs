@@ -54,7 +54,6 @@ int kfsrun(void);
 
 #define _msgout(format, ...) do { fprintf(stderr, format "\n", ##__VA_ARGS__); } while (0)
 #define _errout(format, ...) do { fprintf(stderr, format " %i: %s\n", ##__VA_ARGS__, errno, strerror(errno)); } while (0)
-#define NFS_VUNREAL	999
 
 static void finalize(void) __attribute__((destructor));
 static void finalize(void) {
@@ -94,7 +93,7 @@ kfsid_t kfs_mount(const kfsfilesystem_t *filesystem) {
 		.fh = (u_char *)fshandle,
 		.fhsize = strlen(fshandle),
 		.flags = NFSMNT_NFSV3 | NFSMNT_WSIZE | NFSMNT_RSIZE | NFSMNT_READDIRSIZE |
-				 NFSMNT_TIMEO | NFSMNT_RETRANS | NFSMNT_NOLOCKS | NFSMNT_DEADTIMEOUT,
+				 NFSMNT_TIMEO | NFSMNT_RETRANS | NFSMNT_NOLOCKS | NFSMNT_DEADTIMEOUT | NFSMNT_NOQUOTA,
 		.wsize = WRITE_MAX_LEN,
 		.rsize = READ_MAX_LEN,
 		.readdirsize = DIR_MAX_LEN,
@@ -183,14 +182,6 @@ static int kfsrun(void) {
 		return 1;
 	}
 	g_nfs_port = baddr.sin_port;
-	
-	// wake up the portmap daemon. on os x 10.7 (lion) the nfs implementation will hang if
-	// it can't communicate with the portmap daemon. this call is enough to get it started
-	// up, and as long as our nfs port is active, the portmap daemon will stay alive. the
-	// point of using an unreal version number is to avoid causing any problems with any
-	// real nfs servers that could be running.
-	pmap_unset(NFS_PROGRAM, NFS_VUNREAL);
-	pmap_set(NFS_PROGRAM, NFS_VUNREAL, IPPROTO_TCP, g_nfs_port);
 	
 	// create the service, then register the nfs and mount programs. we supply
 	// a protocol of 0 here so that the programs aren't registered with portmap
