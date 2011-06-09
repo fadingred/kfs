@@ -327,10 +327,10 @@ int runtests(void) {
 	cmdassert_match("cat   /tmp/kfstest/mount/filelink", "hello\nworld", "read symlink");
 
 	// change modificaiton time of the file
-	cmdassert_empty("touch -m -t 201102211100.00 /tmp/kfstest/mount/file", "touch the file");
-	cmdassert_match("stat -f '%m' /tmp/kfstest/mount/file", "1298307600", "get modification time");
-	cmdassert_empty("touch -m -t 201102211100.01 /tmp/kfstest/mount/file", "touch the file again");
-	cmdassert_match("stat -f '%m' /tmp/kfstest/mount/file", "1298307601", "get modification time again");
+	cmdassert_empty("TZ=GMT touch -m -t 201102211100.00 /tmp/kfstest/mount/file", "touch the file");
+	cmdassert_match("stat -f '%m' /tmp/kfstest/mount/file", "1298286000", "get modification time");
+	cmdassert_empty("TZ=GMT touch -m -t 201102211100.01 /tmp/kfstest/mount/file", "touch the file again");
+	cmdassert_match("stat -f '%m' /tmp/kfstest/mount/file", "1298286001", "get modification time again");
 	
 	// remove the file
 	cmdassert_empty("rm  /tmp/kfstest/mount/file", "remove file");
