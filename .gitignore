@@ -1,0 +1,6 @@
+*.pbxuser
+*.perspective*
+*.mode*
+*.xcuserdatad
+
+build

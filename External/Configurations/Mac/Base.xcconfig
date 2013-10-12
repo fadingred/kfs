@@ -1,0 +1,54 @@
+//
+// Copyright (c) 2013, FadingRed LLC
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+// following conditions are met:
+//
+//   - Redistributions of source code must retain the above copyright notice, this list of conditions and the
+//     following disclaimer.
+//   - Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+//     following disclaimer in the documentation and/or other materials provided with the distribution.
+//   - Neither the name of the FadingRed LLC nor the names of its contributors may be used to endorse or promote
+//     products derived from this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+// INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+// USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+
+// \brief		Standard settings
+// \details		These settings are shared by all configurations. They
+//				are not dynamic.
+// ------------------------------------------------------------------
+
+CLANG_ENABLE_OBJC_ARC = YES
+LD_RUNPATH_SEARCH_PATHS = @loader_path/../Frameworks
+GCC_VERSION = com.apple.compilers.llvm.clang.1_0
+MACOSX_DEPLOYMENT_TARGET = 10.6
+VALID_ARCHS = x86_64
+SDKROOT = $(DEVELOPER_SDK_DIR)/MacOSX10.7.sdk
+
+
+// \brief		Custom settings
+// \details		Settings based on the dynamic configurations. If you
+//				add a new setting, be sure to add a setting in the
+//				section that enables them at the bottom of this file.
+// ------------------------------------------------------------------
+
+
+KFS_CONFIG_DEBUG_ARCHS = $(NATIVE_ARCH_ACTUAL)
+KFS_CONFIG_RELEASE_ARCHS = $(ARCHS_STANDARD_32_64_BIT)
+
+
+// \brief		Enabling customized settings
+// \details		This section allows the above settings to work. It
+//				uses the names of the different dynamic defines to
+//				pull the customized settings that it needs.
+// ------------------------------------------------------------------
+
+ARCHS = $(KFS_CONFIG_$(KFS_CONFIG)_ARCHS)

@@ -2,7 +2,7 @@
 //  nfs.c
 //  KFS
 //
-//  Copyright (c) 2011, FadingRed LLC
+//  Copyright (c) 2012, FadingRed LLC
 //  All rights reserved.
 //  
 //  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -36,8 +36,8 @@
 #include <stdio.h>
 #include <limits.h>
 
-//#define DEBUG
-#ifdef DEBUG
+//#define KFS_DEBUG_LOG
+#ifdef KFS_DEBUG_LOG
 #define dlog(format, ...) do { fprintf(stderr, format "\n", ##__VA_ARGS__); } while (0)
 #define dlog_begin(format, ...) do { \
 	dlog("begin %s", __FUNCTION__); \
@@ -115,13 +115,14 @@ nfsstat3 get_fattr(nfs_fh3 object, fattr3 *result);
 nfsstat3 get_fattr(nfs_fh3 object, fattr3 *result) {
 	nfsstat3 status = NFS3_OK;
 	uint64_t identifier = 0;
+	int error = 0;
 	const char *path = NULL;
 	const kfsfilesystem_t *filesystem = get_filesystem(object, &path, &identifier);
 	if (filesystem) {
 		dlog("\t%s (path, getattr)", path);
 		
 		kfsstat_t sbuf = {};
-		if (filesystem->stat(path, &sbuf, filesystem->context)) {
+		if (filesystem->stat(path, &sbuf, &error, filesystem->context)) {
 			*result = (fattr3){};
 			
 			if (0) {}
@@ -155,7 +156,7 @@ nfsstat3 get_fattr(nfs_fh3 object, fattr3 *result) {
 			result->mtime = (nfstime3){ sbuf.mtime.sec, sbuf.mtime.nsec };
 			result->ctime = (nfstime3){ sbuf.ctime.sec, sbuf.ctime.nsec };
 		} else { // stat failed
-			status = convert_status(errno, NFS3ERR_NOENT);
+			status = convert_status(error, NFS3ERR_NOENT);
 		}
 	} else { // no filesystem
 		status = NFS3ERR_BADHANDLE;
@@ -168,6 +169,7 @@ nfsstat3 get_fattr(nfs_fh3 object, fattr3 *result) {
 nfsstat3 set_fattr(nfs_fh3 object, const sattr3 *attrs);
 nfsstat3 set_fattr(nfs_fh3 object, const sattr3 *attrs) {
 	nfsstat3 status = NFS3_OK;
+	int error = 0;
 	const char *path = NULL;
 	const kfsfilesystem_t *filesystem = get_filesystem(object, &path, NULL);
 	if (filesystem) {
@@ -175,8 +177,8 @@ nfsstat3 set_fattr(nfs_fh3 object, const sattr3 *attrs) {
 
 		// check for resize
 		if (status == NFS3_OK && attrs->size.set_it) {
-			if (!filesystem->truncate(path, attrs->size.set_size3_u.size, filesystem->context)) {
-				status = convert_status(errno, NFS3ERR_NOENT); // truncate failed
+			if (!filesystem->truncate(path, attrs->size.set_size3_u.size, &error, filesystem->context)) {
+				status = convert_status(error, NFS3ERR_NOENT); // truncate failed
 			}
 		}
 
@@ -193,8 +195,8 @@ nfsstat3 set_fattr(nfs_fh3 object, const sattr3 *attrs) {
 			if (attrs->mode.set_mode3_u.mode & NFS_IWOTH) { mode |= KFS_IWOTH; }
 			if (attrs->mode.set_mode3_u.mode & NFS_IXOTH) { mode |= KFS_IXOTH; }
 			
-			if (!filesystem->chmod(path, mode, filesystem->context)) {
-				status = convert_status(errno, NFS3ERR_NOENT); // chmod failed
+			if (!filesystem->chmod(path, mode, &error, filesystem->context)) {
+				status = convert_status(error, NFS3ERR_NOENT); // chmod failed
 			}
 		}
 		
@@ -209,8 +211,8 @@ nfsstat3 set_fattr(nfs_fh3 object, const sattr3 *attrs) {
 				.nsec = attrs->mtime.set_mtime_u.mtime.nseconds
 			} : NULL;
 			
-			if (!filesystem->utimes(path, atime, mtime, filesystem->context)) {
-				status = convert_status(errno, NFS3ERR_NOENT); // utimes failed
+			if (!filesystem->utimes(path, atime, mtime, &error, filesystem->context)) {
+				status = convert_status(error, NFS3ERR_NOENT); // utimes failed
 			}
 		}
 		
@@ -406,18 +408,19 @@ READLINK3res *
 nfsproc3_readlink_3_svc(READLINK3args args,  struct svc_req *rqstp) {
 	dlog_begin("\t%s (handle)", args.symlink.data.data_val);
 	static READLINK3res result;
+	int error = 0;
 	const char *path = NULL;
 	const kfsfilesystem_t *filesystem = get_filesystem(args.symlink, &path, NULL);
 	if (filesystem) {
 		dlog("\t%s (path)", path);
 		char *data = NULL;
-		if (filesystem->readlink(path, &data, filesystem->context)) {
+		if (filesystem->readlink(path, &data, &error, filesystem->context)) {
 			static char buffer[PATH_MAX];
 			strncpy(buffer, data, PATH_MAX);
 			result.status = NFS3_OK;
 			result.READLINK3res_u.resok.data = buffer;
 		} else { // readlink failed
-			result.status = convert_status(errno, NFS3ERR_INVAL);
+			result.status = convert_status(error, NFS3ERR_INVAL);
 			switch (result.status) {
 				case NFS3_OK:
 				case NFS3ERR_IO:
@@ -449,6 +452,7 @@ READ3res *
 nfsproc3_read_3_svc(READ3args args,  struct svc_req *rqstp) {
 	dlog_begin("\t%s %lli %i", args.file.data.data_val, args.offset, args.count);
 	static READ3res result;
+	int error = 0;
 	const char *path = NULL;
 	const kfsfilesystem_t *filesystem = get_filesystem(args.file, &path, NULL);
 	if (filesystem) {
@@ -457,7 +461,7 @@ nfsproc3_read_3_svc(READ3args args,  struct svc_req *rqstp) {
 		int count = 0;
 		int rsize = args.count;
 		if (rsize > READ_MAX_LEN) { rsize = READ_MAX_LEN; }
-		if ((count = filesystem->read(path, buffer, args.offset, rsize, filesystem->context)) != -1) {
+		if ((count = filesystem->read(path, buffer, args.offset, rsize, &error, filesystem->context)) != -1) {
 			result.status = NFS3_OK;
 			result.READ3res_u.resok.data.data_val = buffer;
 			result.READ3res_u.resok.data.data_len = READ_MAX_LEN;
@@ -465,7 +469,7 @@ nfsproc3_read_3_svc(READ3args args,  struct svc_req *rqstp) {
 			result.READ3res_u.resok.eof = (count == 0);
 
 		} else { // read failed
-			result.status = convert_status(errno, NFS3ERR_IO);
+			result.status = convert_status(error, NFS3ERR_IO);
 			switch (result.status) {
 				case NFS3_OK:
 				case NFS3ERR_IO:
@@ -497,6 +501,7 @@ WRITE3res *
 nfsproc3_write_3_svc(WRITE3args args,  struct svc_req *rqstp) {
 	dlog_begin("\t%s (handle) %lli %i", args.file.data.data_val, args.offset, args.count);
 	static WRITE3res result;
+	int error = 0;
 	const char *path = NULL;
 	const kfsfilesystem_t *filesystem = get_filesystem(args.file, &path, NULL);
 
@@ -510,12 +515,12 @@ nfsproc3_write_3_svc(WRITE3args args,  struct svc_req *rqstp) {
 		int count = 0;
 		int wsize = args.count;
 		if (wsize > WRITE_MAX_LEN) { wsize = WRITE_MAX_LEN; }
-		if ((count = filesystem->write(path, args.data.data_val, args.offset, wsize, filesystem->context)) != -1) {
+		if ((count = filesystem->write(path, args.data.data_val, args.offset, wsize, &error, filesystem->context)) != -1) {
 			result.status = NFS3_OK;
 			result.WRITE3res_u.resok.count = count;
 			result.WRITE3res_u.resok.committed = FILE_SYNC;
 		} else { // write failed
-			result.status = convert_status(errno, NFS3ERR_IO);
+			result.status = convert_status(error, NFS3ERR_IO);
 			switch (result.status) {
 				case NFS3_OK:
 				case NFS3ERR_IO:
@@ -551,6 +556,7 @@ nfsproc3_create_3_svc(CREATE3args args,  struct svc_req *rqstp) {
 	dlog_begin("\t%s (handle) %s", args.where.dir.data.data_val, args.where.name);
 	static CREATE3res result;
 	uint64_t identifier = 0;
+	int error = 0;
 	const char *path = NULL;
 	const kfsfilesystem_t *filesystem = get_filesystem(args.where.dir, &path, &identifier);
 
@@ -586,40 +592,44 @@ nfsproc3_create_3_svc(CREATE3args args,  struct svc_req *rqstp) {
 
 		// after mode check
 		if (result.status == NFS3_OK) {
-			if (filesystem->create(fspath, filesystem->context)) {
+			if (filesystem->create(fspath, &error, filesystem->context)) {
 				result.status = NFS3_OK;
 				result.CREATE3res_u.resok.obj.handle_follows = true;
 				result.CREATE3res_u.resok.obj.post_op_fh3_u.handle = fh;
 				
-				// set attributes now if guarded
-				if (args.how.mode == GUARDED) {
-					nfsstat3 setstatus = set_fattr(fh, &args.how.createhow3_u.obj_attributes);
-					switch (setstatus) {
-						case NFS3_OK:
-						case NFS3ERR_IO:
-						case NFS3ERR_ACCES:
-						case NFS3ERR_EXIST:
-						case NFS3ERR_NOTDIR:
-						case NFS3ERR_NOSPC:
-						case NFS3ERR_ROFS:
-						case NFS3ERR_NAMETOOLONG:
-						case NFS3ERR_DQUOT:
-						case NFS3ERR_STALE:
-						case NFS3ERR_BADHANDLE:
-						case NFS3ERR_NOTSUPP:
-						case NFS3ERR_SERVERFAULT:
-							result.status = setstatus;
-							break;
-						default:
-							result.status = NFS3ERR_SERVERFAULT;
-							break;
-					}
+				// set attributes now
+				nfsstat3 setstatus = set_fattr(fh, &args.how.createhow3_u.obj_attributes);
+				switch (setstatus) {
+					case NFS3_OK:
+					case NFS3ERR_IO:
+					case NFS3ERR_ACCES:
+					case NFS3ERR_EXIST:
+					case NFS3ERR_NOTDIR:
+					case NFS3ERR_NOSPC:
+					case NFS3ERR_ROFS:
+					case NFS3ERR_NAMETOOLONG:
+					case NFS3ERR_DQUOT:
+					case NFS3ERR_STALE:
+					case NFS3ERR_BADHANDLE:
+					case NFS3ERR_NOTSUPP:
+					case NFS3ERR_SERVERFAULT:
+						result.status = setstatus;
+						break;
+					default:
+						result.status = NFS3ERR_SERVERFAULT;
+						break;
+				}
+				
+				if (setstatus != NFS3_OK) {
+					// remove the file if there was an error (and don't worry about
+					// whether this is successful or not)
+					filesystem->remove(fspath, &(int){0}, filesystem->context);
 				}
 				
 				get_required_post_op(&result.CREATE3res_u.resok.obj_attributes, fh);
 				
 			} else { // create failed
-				result.status = convert_status(errno, NFS3ERR_IO);
+				result.status = convert_status(error, NFS3ERR_IO);
 				switch (result.status) {
 					case NFS3_OK:
 					case NFS3ERR_IO:
@@ -658,6 +668,7 @@ nfsproc3_mkdir_3_svc(MKDIR3args args,  struct svc_req *rqstp) {
 	dlog_begin("\t%s (handle) %s", args.where.dir.data.data_val, args.where.name);
 	static MKDIR3res result;
 	uint64_t identifier = 0;
+	int error = 0;
 	const char *path = NULL;
 	const kfsfilesystem_t *filesystem = get_filesystem(args.where.dir, &path, &identifier);
 
@@ -676,7 +687,7 @@ nfsproc3_mkdir_3_svc(MKDIR3args args,  struct svc_req *rqstp) {
 		snprintf(filehandle, PATH_MAX, "%llu:%llu", identifier, kfs_fileid(identifier, fspath));
 		nfs_fh3 fh = { .data = { .data_val = filehandle, .data_len = strlen(filehandle) + 1, } };
 		
-		if (filesystem->mkdir(fspath, filesystem->context)) {
+		if (filesystem->mkdir(fspath, &error, filesystem->context)) {
 			result.status = NFS3_OK;
 			result.MKDIR3res_u.resok.obj.handle_follows = true;
 			result.MKDIR3res_u.resok.obj.post_op_fh3_u.handle = fh;
@@ -704,10 +715,16 @@ nfsproc3_mkdir_3_svc(MKDIR3args args,  struct svc_req *rqstp) {
 					break;
 			}
 			
+			if (setstatus != NFS3_OK) {
+				// remove the directory if there was an error (and don't worry about
+				// whether this is successful or not)
+				filesystem->rmdir(fspath, &(int){0}, filesystem->context);
+			}
+
 			get_required_post_op(&result.MKDIR3res_u.resok.obj_attributes, fh);
 			
 		} else { // mkdir failed
-			result.status = convert_status(errno, NFS3ERR_IO);
+			result.status = convert_status(error, NFS3ERR_IO);
 			switch (result.status) {
 				case NFS3_OK:
 				case NFS3ERR_IO:
@@ -745,6 +762,7 @@ nfsproc3_symlink_3_svc(SYMLINK3args args,  struct svc_req *rqstp) {
 	dlog_begin("\t%s (handle) %s", args.where.dir.data.data_val, args.where.name);
 	static SYMLINK3res result;
 	uint64_t identifier = 0;
+	int error = 0;
 	const char *path = NULL;
 	const kfsfilesystem_t *filesystem = get_filesystem(args.where.dir, &path, &identifier);
 
@@ -763,7 +781,7 @@ nfsproc3_symlink_3_svc(SYMLINK3args args,  struct svc_req *rqstp) {
 		snprintf(filehandle, PATH_MAX, "%llu:%llu", identifier, kfs_fileid(identifier, fspath));
 		nfs_fh3 fh = { .data = { .data_val = filehandle, .data_len = strlen(filehandle) + 1, } };
 		
-		if (filesystem->symlink(fspath, args.symlink.symlink_data, filesystem->context)) {
+		if (filesystem->symlink(fspath, args.symlink.symlink_data, &error, filesystem->context)) {
 			result.status = NFS3_OK;
 			result.SYMLINK3res_u.resok.obj.handle_follows = true;
 			result.SYMLINK3res_u.resok.obj.post_op_fh3_u.handle = fh;
@@ -794,7 +812,7 @@ nfsproc3_symlink_3_svc(SYMLINK3args args,  struct svc_req *rqstp) {
 			get_required_post_op(&result.SYMLINK3res_u.resok.obj_attributes, fh);
 			
 		} else { // symlink failed
-			result.status = convert_status(errno, NFS3ERR_IO);
+			result.status = convert_status(error, NFS3ERR_IO);
 			switch (result.status) {
 				case NFS3_OK:
 				case NFS3ERR_IO:
@@ -840,6 +858,7 @@ REMOVE3res *
 nfsproc3_remove_3_svc(REMOVE3args args,  struct svc_req *rqstp) {
 	dlog_begin("\t%s (handle) %s", args.object.dir.data.data_val, args.object.name);
 	static REMOVE3res result;
+	int error = 0;
 	const char *path = NULL;
 	const kfsfilesystem_t *filesystem = get_filesystem(args.object.dir, &path, NULL);
 
@@ -855,10 +874,10 @@ nfsproc3_remove_3_svc(REMOVE3args args,  struct svc_req *rqstp) {
 		bool root = (strcmp(path, "/") == 0);
 		snprintf(fspath, PATH_MAX, root ? "%s%s" : "%s/%s", path, args.object.name);
 		
-		if (filesystem->remove(fspath, filesystem->context)) {
+		if (filesystem->remove(fspath, &error, filesystem->context)) {
 			result.status = NFS3_OK;
 		} else { // remove failed
-			result.status = convert_status(errno, NFS3ERR_IO);
+			result.status = convert_status(error, NFS3ERR_IO);
 			switch (result.status) {
 				case NFS3_OK:
 				case NFS3ERR_NOENT:
@@ -893,6 +912,7 @@ RMDIR3res *
 nfsproc3_rmdir_3_svc(RMDIR3args args,  struct svc_req *rqstp) {
 	dlog_begin("\t%s (handle) %s", args.object.dir.data.data_val, args.object.name);
 	static RMDIR3res result;
+	int error = 0;
 	const char *path = NULL;
 	const kfsfilesystem_t *filesystem = get_filesystem(args.object.dir, &path, NULL);
 
@@ -908,10 +928,10 @@ nfsproc3_rmdir_3_svc(RMDIR3args args,  struct svc_req *rqstp) {
 		bool root = (strcmp(path, "/") == 0);
 		snprintf(fspath, PATH_MAX, root ? "%s%s" : "%s/%s", path, args.object.name);
 		
-		if (filesystem->rmdir(fspath, filesystem->context)) {
+		if (filesystem->rmdir(fspath, &error, filesystem->context)) {
 			result.status = NFS3_OK;
 		} else { // rmdir failed
-			result.status = convert_status(errno, NFS3ERR_IO);
+			result.status = convert_status(error, NFS3ERR_IO);
 			switch (result.status) {
 				case NFS3_OK:
 				case NFS3ERR_NOENT:
@@ -951,6 +971,7 @@ nfsproc3_rename_3_svc(RENAME3args args,  struct svc_req *rqstp) {
 	static RENAME3res result;
 	uint64_t from_identifier = 0;
 	uint64_t to_identifier = 0;
+	int error = 0;
 	const char *from_path = NULL;
 	const char *to_path = NULL;
 	const kfsfilesystem_t *from_filesystem = get_filesystem(args.from.dir, &from_path, &from_identifier);
@@ -978,7 +999,7 @@ nfsproc3_rename_3_svc(RENAME3args args,  struct svc_req *rqstp) {
 		bool to_root = (strcmp(to_path, "/") == 0);
 		snprintf(to_fspath, PATH_MAX, to_root ? "%s%s" : "%s/%s", to_path, args.to.name);
 		
-		if (from_filesystem->rename(from_fspath, to_fspath, from_filesystem->context)) {
+		if (from_filesystem->rename(from_fspath, to_fspath, &error, from_filesystem->context)) {
 			// swap ids so our file handle isn't stale
 			// the destination has been removed, so swapping (rather than overwriting
 			// and generating a new id for the destination path) should be just fine. the
@@ -988,7 +1009,7 @@ nfsproc3_rename_3_svc(RENAME3args args,  struct svc_req *rqstp) {
 					   kfs_fileid(to_identifier, to_fspath));
 			result.status = NFS3_OK;
 		} else { // rename failed
-			result.status = convert_status(errno, NFS3ERR_IO);
+			result.status = convert_status(error, NFS3ERR_IO);
 			switch (result.status) {
 				case NFS3_OK:
 				case NFS3ERR_NOENT:
@@ -1065,12 +1086,13 @@ nfsproc3_readdir_3_svc(READDIR3args args,  struct svc_req *rqstp) {
 	
 	if (cookie_valid) {
 		uint64_t identifier = 0;
+		int error = 0;
 		const char *path = NULL;
 		const kfsfilesystem_t *filesystem = get_filesystem(args.dir, &path, &identifier);
 		if (filesystem) {
 			dlog("\t%s (path)", path);
 			kfscontents_t *contents = kfscontents_create();
-			if (filesystem->readdir(path, contents, filesystem->context)) {
+			if (filesystem->readdir(path, contents, &error, filesystem->context)) {
 				uint64_t cnt_i = 0;
 				uint64_t ent_i = 0;
 				uint64_t cnt_count = kfscontents_count(contents);
@@ -1101,7 +1123,7 @@ nfsproc3_readdir_3_svc(READDIR3args args,  struct svc_req *rqstp) {
 				result.READDIR3res_u.resok.reply.entries = entries;
 				result.READDIR3res_u.resok.reply.eof = (cnt_i == cnt_count);
 			} else { // lsdir failed
-				result.status = convert_status(errno, NFS3ERR_NOTDIR);
+				result.status = convert_status(error, NFS3ERR_NOTDIR);
 				switch (result.status) {
 					case NFS3_OK:
 					case NFS3ERR_IO:
@@ -1148,12 +1170,13 @@ FSSTAT3res *
 nfsproc3_fsstat_3_svc(FSSTAT3args args,  struct svc_req *rqstp) {
 	dlog_begin("\t%s (handle)", args.fsroot.data.data_val);
 	static FSSTAT3res result;
+	int error = 0;
 	const char *path = NULL;
 	const kfsfilesystem_t *filesystem = get_filesystem(args.fsroot, &path, NULL);
 	if (filesystem) {
 		dlog("\t%s (path)", path);
 		kfsstatfs_t sbuf = {};
-		if (filesystem->statfs(path, &sbuf, filesystem->context)) {
+		if (filesystem->statfs(path, &sbuf, &error, filesystem->context)) {
 			result.status = NFS3_OK;
 			result.FSSTAT3res_u.resok.tbytes = sbuf.size;
 			result.FSSTAT3res_u.resok.fbytes = sbuf.free;
@@ -1163,7 +1186,7 @@ nfsproc3_fsstat_3_svc(FSSTAT3args args,  struct svc_req *rqstp) {
 			result.FSSTAT3res_u.resok.afiles = 0;
 			result.FSSTAT3res_u.resok.invarsec = 0;
 		} else { // statfs failed
-			result.status = convert_status(errno, NFS3ERR_IO);
+			result.status = convert_status(error, NFS3ERR_IO);
 			switch (result.status) {
 				case NFS3_OK:
 				case NFS3ERR_IO:

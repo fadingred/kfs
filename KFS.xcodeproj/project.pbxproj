@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -36,6 +36,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8B1AAD7415A1F41E0087C880 /* Framework.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Framework.xcconfig; path = External/Configurations/Mac/Framework.xcconfig; sourceTree = "<group>"; };
+		8B1AAD7515A1F42C0087C880 /* Project.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Project.debug.xcconfig; path = External/Configurations/Shared/Project.debug.xcconfig; sourceTree = "<group>"; };
+		8B1AAD7615A1F42C0087C880 /* Project.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Project.release.xcconfig; path = External/Configurations/Shared/Project.release.xcconfig; sourceTree = "<group>"; };
 		8B1DA2A812FB4A7400AD3459 /* KFS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KFS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B1DA2AA12FB4A7400AD3459 /* KFS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = KFS.plist; path = Info/KFS.plist; sourceTree = "<group>"; };
 		8B1DA2F012FB4B4C00AD3459 /* KFS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KFS.h; path = Source/KFS.h; sourceTree = "<group>"; };
@@ -78,6 +81,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8B1AAD7315A1F4120087C880 /* Configurations */ = {
+			isa = PBXGroup;
+			children = (
+				8B1AAD7815A1F4330087C880 /* Mac */,
+				8B1AAD7715A1F42F0087C880 /* Shared */,
+			);
+			name = Configurations;
+			sourceTree = "<group>";
+		};
+		8B1AAD7715A1F42F0087C880 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				8B1AAD7515A1F42C0087C880 /* Project.debug.xcconfig */,
+				8B1AAD7615A1F42C0087C880 /* Project.release.xcconfig */,
+			);
+			name = Shared;
+			sourceTree = "<group>";
+		};
+		8B1AAD7815A1F4330087C880 /* Mac */ = {
+			isa = PBXGroup;
+			children = (
+				8B1AAD7415A1F41E0087C880 /* Framework.xcconfig */,
+			);
+			name = Mac;
+			sourceTree = "<group>";
+		};
 		8B1DA28812FB4A1A00AD3459 = {
 			isa = PBXGroup;
 			children = (
@@ -104,6 +133,7 @@
 		8B1DA2B212FB4A7E00AD3459 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8B1AAD7315A1F4120087C880 /* Configurations */,
 				8B1DA2BE12FB4AB100AD3459 /* Info */,
 			);
 			name = Resources;
@@ -253,10 +283,11 @@
 		8B1DA28A12FB4A1A00AD3459 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "FadingRed LLC";
 			};
 			buildConfigurationList = 8B1DA28D12FB4A1A00AD3459 /* Build configuration list for PBXProject "KFS" */;
-			compatibilityVersion = "Xcode 2.4";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -321,75 +352,40 @@
 /* Begin XCBuildConfiguration section */
 		8B1DA28B12FB4A1A00AD3459 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8B1AAD7515A1F42C0087C880 /* Project.debug.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
-				GCC_WARN_MISSING_PARENTHESES = YES;
-				GCC_WARN_SHADOW = YES;
-				GCC_WARN_SIGN_COMPARE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_VALUE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				RUN_CLANG_STATIC_ANALYZER = YES;
 			};
 			name = Debug;
 		};
 		8B1DA28C12FB4A1A00AD3459 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8B1AAD7615A1F42C0087C880 /* Project.release.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
-				GCC_WARN_MISSING_PARENTHESES = YES;
-				GCC_WARN_SHADOW = YES;
-				GCC_WARN_SIGN_COMPARE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_VALUE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				RUN_CLANG_STATIC_ANALYZER = YES;
 			};
 			name = Release;
 		};
 		8B1DA2AB12FB4A7400AD3459 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8B1AAD7415A1F41E0087C880 /* Framework.xcconfig */;
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				GCC_PREFIX_HEADER = Source/KFS.pch;
 				INFOPLIST_FILE = Info/KFS.plist;
-				INSTALL_PATH = "@rpath";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				PRODUCT_NAME = KFS;
 			};
 			name = Debug;
 		};
 		8B1DA2AC12FB4A7400AD3459 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8B1AAD7415A1F41E0087C880 /* Framework.xcconfig */;
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				GCC_PREFIX_HEADER = Source/KFS.pch;
 				INFOPLIST_FILE = Info/KFS.plist;
-				INSTALL_PATH = "@rpath";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				PRODUCT_NAME = KFS;
 			};
 			name = Release;

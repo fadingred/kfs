@@ -2,7 +2,7 @@
 //  kfslib.c
 //  KFS
 //
-//  Copyright (c) 2011, FadingRed LLC
+//  Copyright (c) 2012, FadingRed LLC
 //  All rights reserved.
 //  
 //  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -92,7 +92,7 @@ kfsid_t kfs_mount(const kfsfilesystem_t *filesystem) {
 		.proto = IPPROTO_TCP,
 		.fh = (u_char *)fshandle,
 		.fhsize = strlen(fshandle),
-		.flags = NFSMNT_NFSV3 | NFSMNT_WSIZE | NFSMNT_RSIZE | NFSMNT_READDIRSIZE |
+		.flags = NFSMNT_NFSV3 | NFSMNT_SOFT | NFSMNT_WSIZE | NFSMNT_RSIZE | NFSMNT_READDIRSIZE |
 				 NFSMNT_TIMEO | NFSMNT_RETRANS | NFSMNT_NOLOCKS | NFSMNT_DEADTIMEOUT | NFSMNT_NOQUOTA,
 		.wsize = WRITE_MAX_LEN,
 		.rsize = READ_MAX_LEN,
@@ -133,8 +133,10 @@ void kfs_unmount(kfsid_t identifier) {
 
 	// unmount the filesystem
 	if (filesystem) {
-		unmount(filesystem->options.mountpoint, MNT_FORCE);
-		rmdir(filesystem->options.mountpoint);
+		if (unmount(filesystem->options.mountpoint, MNT_FORCE) == 0) {
+			// remove directory if successfully unmounted
+			rmdir(filesystem->options.mountpoint);
+		}
 	}
 
 	// remove the entry from our table

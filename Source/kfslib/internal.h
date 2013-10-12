@@ -2,7 +2,7 @@
 //  internal.h
 //  KFS
 //
-//  Copyright (c) 2011, FadingRed LLC
+//  Copyright (c) 2012, FadingRed LLC
 //  All rights reserved.
 //  
 //  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -69,6 +69,6 @@ bool kfstable_iterate(kfsid_t *identifier);
 
 #define READ_MAX_LEN	0x10000		/* 64K */
 #define WRITE_MAX_LEN	0x10000		/* 64K */
-#define DIR_MAX_LEN		0x1000		/* 4096 */
+#define DIR_MAX_LEN		0x00800		/* 2048 */
 
 #endif

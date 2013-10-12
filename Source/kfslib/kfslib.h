@@ -2,7 +2,7 @@
 //  kfslib.h
 //  KFS
 //
-//  Copyright (c) 2011, FadingRed LLC
+//  Copyright (c) 2012, FadingRed LLC
 //  All rights reserved.
 //  
 //  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -31,6 +31,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <limits.h>
+#include <errno.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
@@ -64,6 +65,27 @@ typedef enum {
 	KFS_IXOTH = 0x001,
 } kfsmode_t;
 
+typedef enum {
+	KFSERR_PERM = EPERM,
+	KFSERR_NOENT = ENOENT,
+	KFSERR_IO = EIO,
+	KFSERR_NXIO = ENXIO,
+	KFSERR_ACCES = EACCES,
+	KFSERR_EXIST = EEXIST,
+	KFSERR_XDEV = EXDEV,
+	KFSERR_NODEV = ENODEV,
+	KFSERR_NOTDIR = ENOTDIR,
+	KFSERR_ISDIR = EISDIR,
+	KFSERR_INVAL = EINVAL,
+	KFSERR_FBIG = EFBIG,
+	KFSERR_NOSPC = ENOSPC,
+	KFSERR_ROFS = EROFS,
+	KFSERR_MLINK = EMLINK,
+	KFSERR_NAMETOOLONG = ENAMETOOLONG,
+	KFSERR_NOTEMPTY = ENOTEMPTY,
+	KFSERR_DQUOT = EDQUOT,
+} kfserror_t;
+
 /*!
  \name		Main functionality
  \details	The following types and functions are creating and mounting user space filesystems.
@@ -75,34 +97,34 @@ typedef enum {
  \details	Get statistics from the filesystem located at path. Set all attributes you
 			support in the stat structure.
  */
-typedef bool (*kfsstatfs_f)(const char *path, kfsstatfs_t *stat, void *context);
+typedef bool (*kfsstatfs_f)(const char *path, kfsstatfs_t *stat, int *error, void *context);
 
 /*!
  \brief		Stat a file
  \details	Get statistics from the file located at path. Set all attributes you
 			support in the stat structure. This should not follow symbolic links.
  */
-typedef bool (*kfsstat_f)(const char *path, kfsstat_t *stat, void *context);
+typedef bool (*kfsstat_f)(const char *path, kfsstat_t *stat, int *error, void *context);
 
 /*!
  \brief		Read from a file
  \details	Read length bytes from the file at path starting at offset. Read the data into the buffer which
 			is guarenteed to be large enough to hold length bytes. Return -1 on error.
  */
-typedef ssize_t (*kfsread_f)(const char *path, char *buf, size_t offset, size_t length, void *context);
+typedef ssize_t (*kfsread_f)(const char *path, char *buf, size_t offset, size_t length, int *error, void *context);
 
 /*!
  \brief		Write to a file
  \details	Write length bytes to the file at path starting at offset. Write the data from the buffer which
 			is guarenteed to be large enough to hold length bytes. Return -1 on error.
  */
-typedef ssize_t (*kfswrite_f)(const char *path, const char *buf, size_t offset, size_t length, void *context);
+typedef ssize_t (*kfswrite_f)(const char *path, const char *buf, size_t offset, size_t length, int *error, void *context);
 
 /*!
  \brief		Create a symbolic link
  \details	Create a link at path with the given value.
  */
-typedef bool (*kfssymlink_f)(const char *path, const char *value, void *context);
+typedef bool (*kfssymlink_f)(const char *path, const char *value, int *error, void *context);
 
 /*!
  \brief		Read the contents of a link
@@ -110,63 +132,63 @@ typedef bool (*kfssymlink_f)(const char *path, const char *value, void *context)
 			string in value (you should allocate memeory for this). The caller will free
 			the memory you allocate. This is not your responsibility.
  */
-typedef bool (*kfsreadlink_f)(const char *path, char **value, void *context);
+typedef bool (*kfsreadlink_f)(const char *path, char **value, int *error, void *context);
 
 /*!
  \brief		Create a file
  \details	Create a file at the given path.
  */
-typedef bool (*kfscreate_f)(const char *path, void *context);
+typedef bool (*kfscreate_f)(const char *path, int *error, void *context);
 
 /*!
  \brief		Remove a file
  \details	Remove a file at the given path.
  */
-typedef bool (*kfsremove_f)(const char *path, void *context);
+typedef bool (*kfsremove_f)(const char *path, int *error, void *context);
 
 /*!
  \brief		Move a file
  \details	Move a file at the given path to the new path.
  */
-typedef bool (*kfsrename_f)(const char *path, const char *new_path, void *context);
+typedef bool (*kfsrename_f)(const char *path, const char *new_path, int *error, void *context);
 
 /*!
  \brief		Resize a file
  \details	Resize the file to the given size.
  */
-typedef bool (*kfstruncate_f)(const char *path, uint64_t size, void *context);
+typedef bool (*kfstruncate_f)(const char *path, uint64_t size, int *error, void *context);
 
 /*!
  \brief		Change mode for a file
  \details	Change to the specified mode.
  */
-typedef bool (*kfschmod_f)(const char *path, kfsmode_t mode, void *context);
+typedef bool (*kfschmod_f)(const char *path, kfsmode_t mode, int *error, void *context);
 
 /*!
  \brief		Change times for a file
  \details	Change the access and modification times of a file. If a time should be set,
 			it will be non-null.
  */
-typedef bool (*kfsutimes_f)(const char *path, const kfstime_t *atime, const kfstime_t *mtime, void *context);
+typedef bool (*kfsutimes_f)(const char *path, const kfstime_t *atime, const kfstime_t *mtime, int *error, void *context);
 
 /*!
  \brief		Create a directory
  \details	Create a directory at the given path.
  */
-typedef bool (*kfsmkdir_f)(const char *path, void *context);
+typedef bool (*kfsmkdir_f)(const char *path, int *error, void *context);
 
 /*!
  \brief		Remove a directory
  \details	Remove a directory at the given path.
  */
-typedef bool (*kfsrmdir_f)(const char *path, void *context);
+typedef bool (*kfsrmdir_f)(const char *path, int *error, void *context);
 
 /*!
  \brief		Get a directory's contents
  \details	Get the contents of the directory at path. Add file entries to the contents by calling
 			kfscontents_append. Values are copied so you do not need to keep them in memory.
  */
-typedef bool (*kfsreaddir_f)(const char *path, kfscontents_t *contents, void *context);
+typedef bool (*kfsreaddir_f)(const char *path, kfscontents_t *contents, int *error, void *context);
 
 /*!
  \brief		

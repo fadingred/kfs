@@ -2,7 +2,7 @@
 //  KFS.h
 //  KFS
 //
-//  Copyright (c) 2011, FadingRed LLC
+//  Copyright (c) 2012, FadingRed LLC
 //  All rights reserved.
 //  
 //  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
